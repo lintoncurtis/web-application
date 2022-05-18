@@ -1,0 +1,61 @@
+<?php
+	require('db.php');
+	$conn = connection('fooddb');
+
+	if (isset($_POST['login'])) {
+
+		$username = $_POST['user'];
+		$password = sha1($_POST['pass']);
+
+		if ($_POST['user'] == NULL || $_POST['pass'] == NULL) {
+			echo "Fill in all fields bruh";
+		}else{
+			$sql = "SELECT username, password FROM users WHERE username = '$username'";
+			$pass = getdata($sql, "login"); 
+
+			if ($pass == $password) {
+				$_SESSION['username'] = $username;
+				header('Location: main.php');
+			}else{
+				echo "Incorrect Password!";
+			}
+		}
+	}
+
+	if (isset($_POST['logout'])) {
+		logout();
+	}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<div id="container">
+	
+	<h3>LOGIN</h3>
+
+	<form action="index.php" method="post">
+		<table id="login">
+			<tr>
+				<td><label for="user">Username</label></td>
+				<td><input type="text" name="user" id="user"></td>
+			</tr>
+			<tr>
+				<td><label for="pass">Password</label></td>
+				<td><input type="password" name="pass" id="pass"></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="submit" name="login" value="Login"></td>
+			</tr>
+		</table>
+	</form>
+
+	<nav>Don't have an account? <a href="register.php">Register</a></nav>
+	</div>
+</body>
+</html>
